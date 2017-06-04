@@ -12,11 +12,13 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<app.main.class>org.asnworks.projects.practice.crunchexamples.CrunchHelloWorldExample</app.main.class>
+		<app.main.class>org.asnworks.projects.practice.crunchexamples.CrunchSongDoFnExample</app.main.class>
 		<hadoop.version>2.5.0-cdh5.2.1</hadoop.version>
+		<avro.version>1.7.4</avro.version>
+		<opencsv.version>2.3</opencsv.version>
 	</properties>
 	<repositories>
-		
+
 		<repository>
 			<id>maven-hadoop</id>
 			<name>Hadoop Releases</name>
@@ -30,7 +32,7 @@
 	</repositories>
 
 	<dependencies>
-	<dependency>
+		<dependency>
 			<groupId>org.apache.crunch</groupId>
 			<artifactId>crunch-core</artifactId>
 			<version>0.11.0-hadoop2</version>
@@ -47,6 +49,16 @@
 			<version>2.6.0</version>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.avro</groupId>
+			<artifactId>avro</artifactId>
+			<version>${avro.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.opencsv</groupId>
+			<artifactId>opencsv</artifactId>
+			<version>${opencsv.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.8.2</version>
@@ -54,13 +66,13 @@
 		</dependency>
 	</dependencies>
 	<build>
-	<testResources>
-	        <testResource>
-	            <directory>${project.basedir}/src/test/resources</directory>
-	        </testResource>
-	        
-	    </testResources>
-	    <plugins>
+		<testResources>
+			<testResource>
+				<directory>${project.basedir}/src/test/resources</directory>
+			</testResource>
+
+		</testResources>
+		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -80,8 +92,8 @@
 					</descriptors>
 					<archive>
 						<manifestEntries>
-                			<Class-Path>.</Class-Path>
-            			</manifestEntries>
+							<Class-Path>.</Class-Path>
+						</manifestEntries>
 						<manifest>
 							<mainClass>${app.main.class}</mainClass>
 						</manifest>
@@ -95,10 +107,33 @@
 							<goal>single</goal>
 						</goals>
 					</execution>
-					
 				</executions>
 			</plugin>
-			</plugins>
-	
+			<plugin>
+				<groupId>org.apache.avro</groupId>
+				<artifactId>avro-maven-plugin</artifactId>
+				<version>1.7.4</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<!-- You can include only the goal that is required -->
+							<goal>schema</goal>
+							<goal>protocol</goal>
+							<goal>idl-protocol</goal>
+						</goals>
+						<configuration>
+							<!-- Source directory for your avro specification -->
+							<sourceDirectory>${project.basedir}/src/main/avro/</sourceDirectory>
+							<!-- Destination directory for Java classes generated -->
+							<outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
+							<!-- This forces to use java.lang.String instead of java.lang.CharSequence 
+								in generated class files -->
+							<stringType>String</stringType>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
 </project>

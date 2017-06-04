@@ -30,6 +30,8 @@ public class CrunchHelloWorldExample {
 
 		PipelineResult result = pipeline.done();
 		System.exit(result.succeeded() ? 0 : 1);
+		
+		
 	}
 
 	static DoFn<String, String> AddEmailAddressDoFn() {
