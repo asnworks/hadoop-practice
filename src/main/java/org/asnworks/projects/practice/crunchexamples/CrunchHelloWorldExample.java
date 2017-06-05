@@ -27,11 +27,9 @@ public class CrunchHelloWorldExample {
 
 		PCollection personDataWithEmails = personData.parallelDo(AddEmailAddressDoFn(), Writables.strings());
 		personDataWithEmails.write(To.textFile(outputPath));
-
 		PipelineResult result = pipeline.done();
-		System.exit(result.succeeded() ? 0 : 1);
-		
-		
+		System.exit(result.succeeded() ? 0 : 1);	
+
 	}
 
 	static DoFn<String, String> AddEmailAddressDoFn() {
@@ -43,8 +41,8 @@ public class CrunchHelloWorldExample {
 				String personCompany = inputParts[2];
 
 				String personEmail = personName + "@" + personCompany + ".com";
-				String updatePerson = input+","+personEmail;
-				
+				String updatePerson = input + "," + personEmail;
+
 				emitter.emit(updatePerson);
 			}
 		};
