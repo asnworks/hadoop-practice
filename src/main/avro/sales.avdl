@@ -1,0 +1,21 @@
+@namespace("org.asnworks.projects.practice.crunchexamples.domain")
+
+protocol SalesProtocol {
+    /*Transaction_date,Product,Price,Payment_Type,Name,City,State,Country,Account_Created,Last_Login,Latitude,Longitude*/
+   
+    record Sales {
+        string transactionDate;
+        string productId;
+        string price;
+        string paymentType;
+        string name;
+        string city;
+        string state;
+        string country;
+        string accountCreated;
+        string lastLogin;
+        string latitude;
+        string longitude;
+        
+    }
+}

@@ -12,7 +12,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<app.main.class>org.asnworks.projects.practice.crunchexamples.CrunchSongFilterFnExample</app.main.class>
+		<app.main.class>org.asnworks.projects.practice.crunchexamples.CrunchSalesCSVToSalesAvro</app.main.class>
 		<hadoop.version>2.5.0-cdh5.2.1</hadoop.version>
 		<avro.version>1.7.4</avro.version>
 		<opencsv.version>2.3</opencsv.version>
