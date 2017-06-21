@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.apache.crunch.DoFn;
 import org.apache.crunch.Emitter;
 import org.apache.crunch.PCollection;
-import org.apache.crunch.PGroupedTable;
 import org.apache.crunch.PTable;
 import org.apache.crunch.Pair;
 import org.apache.crunch.Pipeline;
@@ -61,12 +60,49 @@ public class CrunchSalesCSVToSalesAvro extends Configured implements Tool {
 		PTable<String, Double> table = salesObjectsFromAvro.parallelDo(new TotalSalesByCountryDoFn(),
 				Writables.tableOf(Writables.strings(), Writables.doubles()));
 
-		PTable<String, Double> finalResult = table.groupByKey().combineValues(Aggregators.SUM_DOUBLES());
-		
-		System.out.println(finalResult.toString());
+		PTable<String, Double> tableForMasterCard = salesObjectsFromAvro.parallelDo(new TotalSalesForMasterCardDoFn(),
+				Writables.tableOf(Writables.strings(), Writables.doubles()));
+
+		PTable<String, Double> groupBycard = tableForMasterCard.groupByKey().combineValues(Aggregators.SUM_DOUBLES());
+
+		PTable<String, Double> groupByCountry = table.groupByKey().combineValues(Aggregators.SUM_DOUBLES());
+
+		PTable<String, Double> tableForMasterCardByCountry = salesObjectsFromAvro.parallelDo(
+				new TotalMasterCardSalesPerCountryDoFn(), Writables.tableOf(Writables.strings(), Writables.doubles()));
+
+		PTable<String, Double> finalResultForMasterCardFByCountry = tableForMasterCardByCountry.groupByKey()
+				.combineValues(Aggregators.SUM_DOUBLES());
+
+		System.out.println(groupBycard.toString());
+		System.out.println(groupByCountry.toString());
+		System.out.println(finalResultForMasterCardFByCountry.toString());
 
 		PipelineResult result = pipeline.done();
 		return result.succeeded() ? 0 : 1;
+	}
+	
+	
+	static class TotalMasterCardSalesPerCountryDoFn extends DoFn<Sales, Pair<String, Double>> {
+		private static final long serialVersionUID = 9192306655880914652L;
+
+		@Override
+		public void process(Sales input, Emitter<Pair<String, Double>> output) {
+			if (input.getPaymentType().equalsIgnoreCase("Mastercard")) {
+				output.emit(Pair.of(input.getCountry(), Double.parseDouble(input.getPrice())));
+			}
+		}
+
+	}
+
+	static class TotalSalesForMasterCardDoFn extends DoFn<Sales, Pair<String, Double>> {
+
+		private static final long serialVersionUID = -5131709079600089625L;
+
+		@Override
+		public void process(Sales input, Emitter<Pair<String, Double>> output) {
+			output.emit(Pair.of(input.getPaymentType(), Double.parseDouble(input.getPrice())));
+		}
+
 	}
 
 	static class TotalSalesByCountryDoFn extends DoFn<Sales, Pair<String, Double>> {
