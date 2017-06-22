@@ -1,0 +1,32 @@
+/**
+ * namespace corresponds to package name
+ */
+@namespace("org.asnworks.projects.practice.crunchexamples.domain")
+/**
+ * Define a protocol, the protocol is like a contract(interface).
+ */
+protocol SongProtocol {
+    
+    /**
+     * Record corresponds to a class name in Java.
+     */
+    record Song {
+        
+        /**
+         * An id given to the song
+         */
+        string songId;
+
+        /**
+         * The name of the song
+         */
+        string songTitle;
+        
+        /**
+         * The name of the artist the song belongs to
+         */
+        string artistName;
+        
+        
+    }
+}

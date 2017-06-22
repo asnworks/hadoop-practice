@@ -108,7 +108,7 @@ public class CrunchSalesAnalysis extends Configured implements Tool {
 				final Sales.Builder sales = Sales.newBuilder();
 				sales.setTransactionDate(parts[0]);
 				sales.setProductId(parts[1]);
-				sales.setPrice(Double.parseDouble(parts[2]));
+				//sales.setPrice(Double.parseDouble(parts[2]));
 				sales.setPaymentType(parts[3]);
 				sales.setName(parts[4]);
 				sales.setCity(parts[5]);
