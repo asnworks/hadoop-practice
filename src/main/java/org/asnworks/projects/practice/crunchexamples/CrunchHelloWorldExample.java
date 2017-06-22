@@ -26,6 +26,7 @@ public class CrunchHelloWorldExample {
 		System.out.println("Number of lines ingested from : " + personData.length().getValue());
 
 		PCollection personDataWithEmails = personData.parallelDo(AddEmailAddressDoFn(), Writables.strings());
+	
 		personDataWithEmails.write(To.textFile(outputPath));
 
 		PipelineResult result = pipeline.done();
